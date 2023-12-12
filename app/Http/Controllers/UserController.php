@@ -28,17 +28,18 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
+        try {
+            $this->user->create([
+                'name'=> $request->name,
+                'email'=> $request->email,
+                'password'=> bcrypt($request->password),
+            ]);
+        } catch (\Exception $e) {
+            echo json_encode(['error'=> $e->getMessage()]);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -51,26 +52,28 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $this->user->where(['id'=> $id])->update([
+                'name'=> $request->name,
+            ]);
+        } catch (\Exception $e) {
+            echo json_encode(['error'=> $e->getMessage()]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(string $id)
     {
-        //
+        try {
+            $this->user->where(['id'=> $id])->delete();
+        } catch (\Exception $e) {
+            echo json_encode(['error'=> $e->getMessage()]);
+        }
     }
 }
