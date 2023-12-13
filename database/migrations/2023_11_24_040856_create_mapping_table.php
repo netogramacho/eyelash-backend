@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('mapping', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mapping');
+            $table->tinyInteger('active')->default(1);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

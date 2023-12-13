@@ -12,7 +12,8 @@ class Mapping extends Model
     protected $table = "mapping";
 
     protected $fillable = [
-        "mapping"
+        "mapping",
+        "active"
     ];
 
     public function user()

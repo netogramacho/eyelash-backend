@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('curve', function (Blueprint $table) {
             $table->id();
             $table->string('curve');
+            $table->tinyInteger('active')->default(1);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

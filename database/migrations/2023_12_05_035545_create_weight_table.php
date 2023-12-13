@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('weight', function (Blueprint $table) {
             $table->id();
             $table->float('weight');
+            $table->tinyInteger('active')->default(1);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('size', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('size');
+            $table->tinyInteger('active')->default(1);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

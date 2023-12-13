@@ -26,6 +26,7 @@ class MappingSeeders extends Seeder
         Mapping::create([
             "mapping" => "Esquilo",
             "user_id" => 2,
+            "active" => 0
         ]);
 
         Mapping::create([
