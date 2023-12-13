@@ -18,7 +18,7 @@ class SizeController extends Controller
      }
     public function index()
     {
-        echo json_encode($this->size->all());
+        echo json_encode($this->size->where('active', 1)->get());
     }
 
     /**

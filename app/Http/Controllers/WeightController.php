@@ -19,7 +19,7 @@ class WeightController extends Controller
     }
     public function index()
     {
-        echo json_encode($this->weight->all());
+        echo json_encode($this->weight->where('active', 1)->get());
     }
 
     /**

@@ -17,7 +17,7 @@ class VolumeController extends Controller
     }
     public function index()
     {
-        echo json_encode($this->volume->all());
+        echo json_encode($this->volume->where('active', 1)->get());
     }
 
     /**

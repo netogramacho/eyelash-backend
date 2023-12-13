@@ -18,7 +18,7 @@ class CurveController extends Controller
 
     public function index()
     {
-        echo json_encode($this->curve->all());
+        echo json_encode($this->curve->where('active', 1)->get());
     }
 
     /**

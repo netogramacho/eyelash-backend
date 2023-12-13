@@ -19,7 +19,7 @@ class MappingController extends Controller
      */
     public function index()
     {
-        echo json_encode($this->mapping->where(['active', 1])->all());
+        echo json_encode($this->mapping->where('active', 1)->get());
     }
 
     /**

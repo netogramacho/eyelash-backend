@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         // echo json_encode($this->user->with($this->relations)->get());
-        echo json_encode($this->user->all());
+        echo json_encode($this->user->where('active', 1)->get());
     }
 
     /**
