@@ -11,7 +11,8 @@ class Weight extends Model
     protected $table = "weight";
 
     protected $fillable = [
-        "weight"
+        "weight",
+        "active"
     ];
 
     public function user()

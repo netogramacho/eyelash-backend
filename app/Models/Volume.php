@@ -11,7 +11,8 @@ class Volume extends Model
     protected $table = "volume";
 
     protected $fillable = [
-        "volume"
+        "volume",
+        "active"
     ];
 
     public function user()

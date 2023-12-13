@@ -11,7 +11,8 @@ class Size extends Model
 
     protected $table = "size";
     protected $fillable = [
-        "size"
+        "size",
+        "active"
     ];
 
     public function user()

@@ -12,7 +12,8 @@ class Curve extends Model
     protected $table = "curve";
 
     protected $fillable = [
-        "curve"
+        "curve",
+        "active"
     ];
 
     public function user()
