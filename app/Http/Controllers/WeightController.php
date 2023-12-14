@@ -19,7 +19,14 @@ class WeightController extends Controller
     }
     public function index()
     {
-        echo json_encode($this->weight->where('active', 1)->get());
+        try {
+            $weights = $this->weight->where('active', 1)->get();
+
+            return $weights;
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
+
     }
 
     /**
@@ -31,42 +38,32 @@ class WeightController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        echo json_encode($this->weight->findOrFail($id));
-    }
+        try {
+            $weight = $this->weight->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Weight $weight)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Weight $weight)
-    {
-        //
+            return $weight;
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Weight $weight)
+    public function delete(string $id)
     {
-        //
+        try {
+            $this->weight->
+                where(['id' => $id])->
+                update([
+                    'active'=> 0,
+                ]);
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 }

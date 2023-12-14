@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->float('weight');
             $table->tinyInteger('active')->default(1);
-            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

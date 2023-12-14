@@ -8,6 +8,13 @@ use Illuminate\Database\Seeder;
 
 class CurveSeeder extends Seeder
 {
+    protected $uuid1;
+    protected $uuid2;
+
+    public function __construct($uuid1, $uuid2) {
+        $this->uuid1 = $uuid1;
+        $this->uuid2 = $uuid2;
+    }
     /**
      * Run the database seeds.
      */
@@ -15,42 +22,42 @@ class CurveSeeder extends Seeder
     {
         Curve::create([
             "curve" => "C",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Curve::create([
             "curve" => "CC",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Curve::create([
             "curve" => "D",
-            "user_id" => 2,
+            "user_id" => $this->uuid2,
         ]);
 
         Curve::create([
             "curve" => "DD",
-            "user_id" => 2,
+            "user_id" => $this->uuid2,
         ]);
 
         Curve::create([
             "curve" => "L",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Curve::create([
             "curve" => "LC",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Curve::create([
             "curve" => "LU",
-            "user_id" => 1,
+            "user_id" => $this->uuid2,
         ]);
 
         Curve::create([
             "curve" => "N",
-            "user_id" => 2,
+            "user_id" => $this->uuid2,
         ]);
     }
 }

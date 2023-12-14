@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 
 class UserController extends Controller
 {
@@ -13,7 +15,8 @@ class UserController extends Controller
     private $user;
     private $relations = ['curves', 'mappings', 'sizes', 'volumes', 'weights'];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->user = new User();
     }
     /**
@@ -21,8 +24,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        // echo json_encode($this->user->with($this->relations)->get());
-        echo json_encode($this->user->where('active', 1)->get());
+        try {
+            $users = $this->user->where('active', 1)->get();
+            return $users;
+        } catch (Exception $e) {
+            return response()->json(['error' => "Nenhum usuário encontrado."], 404);
+        }
     }
 
     /**
@@ -31,13 +38,23 @@ class UserController extends Controller
     public function create(Request $request)
     {
         try {
-            $this->user->create([
-                'name'=> $request->name,
-                'email'=> $request->email,
-                'password'=> bcrypt($request->password),
-            ]);
-        } catch (\Exception $e) {
-            echo json_encode(['error'=> $e->getMessage()]);
+            $verifyEmail = $this->user->where('email', $request->email)->first();
+            if($verifyEmail) {
+                throw new Exception('E-mail já cadastrado.', 400);
+            }
+
+            $uuid = Uuid::uuid4()->toString();
+
+            $user = new User();
+            $user->id = $uuid;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            return $user;
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 200);
         }
 
     }
@@ -47,8 +64,12 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = $this->user->where('id', $id)->with($this->relations)->get();
-        echo json_encode($user);
+        try {
+            $user = $this->user->with($this->relations)->findOrFail($id);
+            return $user;
+        } catch (Exception $e) {
+            return response()->json(['error' => "Usuário não encontrado"], 404);
+        }
     }
 
     /**
@@ -57,11 +78,13 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $this->user->where(['id'=> $id])->update([
-                'name'=> $request->name,
-            ]);
-        } catch (\Exception $e) {
-            echo json_encode(['error'=> $e->getMessage()]);
+            $user = $this->user->findOrFail($id);
+            $user->name = $request->name;
+            $user->save();
+
+            return $user;
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -71,9 +94,26 @@ class UserController extends Controller
     public function delete(string $id)
     {
         try {
-            $this->user->where(['id'=> $id])->delete();
-        } catch (\Exception $e) {
-            echo json_encode(['error'=> $e->getMessage()]);
+            $this->user->
+                where(['id' => $id])->
+                update([
+                    "active" => 0
+                ]);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage(), $e->getCode()]);
+        }
+    }
+
+    public function resources() {
+
+        try {
+            $currentUser = auth()->userOrFail();
+
+            $resources = $this->user->with($this->relations)->findOrFail($currentUser->id);
+
+            return $resources;
+        } catch (Exception $e) {
+            return response()->json(['error' => "Usuário não encontrado"], 404);
         }
     }
 }

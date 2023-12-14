@@ -12,29 +12,38 @@ class CurveController extends Controller
      * Display a listing of the resource.
      */
     private $curve;
-    public function __construct() {
+    public function __construct()
+    {
         $this->curve = new Curve();
     }
 
     public function index()
     {
-        echo json_encode($this->curve->where('active', 1)->get());
+        try {
+            $curves = $this->curve->where('active', 1)->get();
+
+            return $curves;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
+        try {
+            $currentUser = auth()->userOrFail();
+            $curve = new Curve();
+            $curve->curve = $request->curve;
+            $curve->user_id = $currentUser->id;
+            $curve->save();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+            return $curve;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
@@ -42,30 +51,28 @@ class CurveController extends Controller
      */
     public function show(string $id)
     {
-        echo json_encode($this->curve->findOrFail($id));
-    }
+        try {
+            $curve = $this->curve->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Curve $curve)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Curve $curve)
-    {
-        //
+            return $curve;
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Curve $curve)
+    public function delete(string $id)
     {
-        //
+        try {
+            $this->curve->
+                where(['id' => $id])->
+                update([
+                    'active' => 0
+                ]);
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 }

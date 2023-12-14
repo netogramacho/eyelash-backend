@@ -8,6 +8,13 @@ use Illuminate\Database\Seeder;
 use App\Models\Mapping;
 class MappingSeeders extends Seeder
 {
+    protected $uuid1;
+    protected $uuid2;
+
+    public function __construct($uuid1, $uuid2) {
+        $this->uuid1 = $uuid1;
+        $this->uuid2 = $uuid2;
+    }
     /**
      * Run the database seeds.
      */
@@ -15,28 +22,27 @@ class MappingSeeders extends Seeder
     {
         Mapping::create([
             "mapping" => "Boneca",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Mapping::create([
             "mapping" => "Gatinho",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Mapping::create([
             "mapping" => "Esquilo",
-            "user_id" => 2,
-            "active" => 0
+            "user_id" => $this->uuid2,
         ]);
 
         Mapping::create([
             "mapping" => "Gato",
-            "user_id" => 1,
+            "user_id" => $this->uuid1,
         ]);
 
         Mapping::create([
             "mapping" => "Kim Kardashian",
-            "user_id" => 2,
+            "user_id" => $this->uuid2,
         ]);
     }
 }

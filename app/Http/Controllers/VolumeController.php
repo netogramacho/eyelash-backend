@@ -12,12 +12,19 @@ class VolumeController extends Controller
      * Display a listing of the resource.
      */
     private $volume;
-    public function __construct() {
+    public function __construct()
+    {
         $this->volume = new Volume();
     }
     public function index()
     {
-        echo json_encode($this->volume->where('active', 1)->get());
+        try {
+            $volumes = $this->volume->where('active', 1)->get();
+
+            return $volumes;
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
@@ -29,42 +36,32 @@ class VolumeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        echo json_encode($this->volume->findOrFail($id));
-    }
+        try {
+            $volume = $this->volume->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Volume $volume)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Volume $volume)
-    {
-        //
+            return $volume;
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Volume $volume)
+    public function delete(string $id)
     {
-        //
+        try {
+            $this->volume->
+                where(['id' => $id])->
+                update([
+                    'active' => 0
+                ]);
+        } catch (\Exception $e) {
+            response()->json(['error'=> $e->getMessage()], $e->getCode());
+        }
     }
 }

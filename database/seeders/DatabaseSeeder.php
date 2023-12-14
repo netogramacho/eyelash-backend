@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Size;
 use Illuminate\Database\Seeder;
-
-use App\Models\User;
-use App\Models\Mapping;
+use Ramsey\Uuid\Uuid;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,14 +12,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $uuid1 = Uuid::uuid4()->toString();
+        $uuid2 = Uuid::uuid4()->toString();
 
-        $this->call([
-            UsersSeeders::class,
-            MappingSeeders::class,
-            WeightSeeder::class,
-            CurveSeeder::class,
-            VolumeSeeder::class,
-            SizeSeeder::class,
-        ]);
+        $userSeeder = new UsersSeeders($uuid1, $uuid2);
+        $userSeeder->run();
+
+        $mappingSeeder = new MappingSeeders($uuid1, $uuid2);
+        $mappingSeeder->run();
+
+        $weightSeeder = new WeightSeeder($uuid1, $uuid2);
+        $weightSeeder->run();
+
+        $curveSeeder = new CurveSeeder($uuid1, $uuid2);
+        $curveSeeder->run();
+
+        $volumeSeeder = new VolumeSeeder($uuid1, $uuid2);
+        $volumeSeeder->run();
+
+        $sizeSeeder = new SizeSeeder($uuid1, $uuid2);
+        $sizeSeeder->run();
     }
 }
